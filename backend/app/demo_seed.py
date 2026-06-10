@@ -8,7 +8,7 @@ from app.core.security import hash_password
 from app.models import Comment, Community, Event, Feedback, LoginActivity, Post, PostLike, Registration, User, UserCommunity
 
 
-DEMO_PASSWORD = "Demo@123"
+DEMO_PASSWORD = "CcUserSecurePass2026!"
 DEMO_DOMAINS = [
     ("Machine Learning", "machine-learning", "Models, papers, and applied AI projects.", "#d97706"),
     ("Competitive Coding", "competitive-coding", "Contests, DSA practice, and interview prep.", "#f59e0b"),
@@ -59,12 +59,12 @@ def seed_demo_data(db: Session, user_count: int = 80) -> dict[str, int]:
     """Insert deterministic demo data with month-spread timestamps for analytics dashboards."""
     random.seed(42)
 
-    admin = db.scalar(select(User).where(User.email == "admin@communityconnect.dev"))
+    admin = db.scalar(select(User).where(User.email == "admin@example.com"))
     if admin is None:
         admin = User(
             full_name="Asha Admin",
-            email="admin@communityconnect.dev",
-            password_hash=hash_password("Admin@123"),
+            email="admin@example.com",
+            password_hash=hash_password("AdminSecureRootPass2026!"),
             role="admin",
             bio="Community moderator and analytics reviewer.",
             created_at=_months_ago(8),
@@ -75,7 +75,7 @@ def seed_demo_data(db: Session, user_count: int = 80) -> dict[str, int]:
         db.add(LoginActivity(user_id=admin.id, logged_in_at=datetime.utcnow()))
         db.commit()
 
-    existing_demo = db.scalar(select(User).where(User.email == "demo.user001@communityconnect.dev"))
+    existing_demo = db.scalar(select(User).where(User.email == "demo.user001@example.com"))
     if existing_demo:
         return {"status": "already_seeded", "users": 0, "communities": 0, "posts": 0, "logins": 0}
 
@@ -101,7 +101,7 @@ def seed_demo_data(db: Session, user_count: int = 80) -> dict[str, int]:
         created_at = _months_ago(random.randint(0, 7), random.randint(-10, 10))
         user = User(
             full_name=full_name,
-            email=f"demo.user{index:03d}@communityconnect.dev",
+            email=f"demo.user{index:03d}@example.com",
             password_hash=hash_password(DEMO_PASSWORD),
             role="user",
             bio=f"Interested in {', '.join(interests)}.",
