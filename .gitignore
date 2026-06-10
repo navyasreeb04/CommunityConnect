@@ -1,0 +1,29 @@
+# --- Python Backend Ignores ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+venv/
+.venv/
+ENV/
+*.db
+communityconnect.db
+
+# --- Frontend Ignores ---
+node_modules/
+dist/
+build/
+.cache/
+
+# --- Security and Environment Ignores ---
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.aws
+
+# --- OS Ignores ---
+.DS_Store
+Thumbs.db

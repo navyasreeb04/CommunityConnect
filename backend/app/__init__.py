@@ -1,0 +1,1 @@
+"""CommunityConnect backend package."""
