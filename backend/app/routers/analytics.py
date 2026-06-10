@@ -50,12 +50,12 @@ def _monthly_counts(db: Session, model, date_column) -> dict[str, int]:
             func.count(model.id).label("count")
         )
         .group_by(func.date_format(date_column, '%Y-%m'))
-        .order_by(func.date_format(date_column, '%Y-%m'))
+        # .order_by(func.date_format(date_column, '%Y-%m'))
     )
     
     # Execute the updated statement
     rows = db.execute(stmt).all()
-    return rows
+    return {month: count for month, count in rows}
 
 
 @router.get("/user", response_model=UserAnalyticsRead)
@@ -207,7 +207,7 @@ def get_admin_analytics(_: User = Depends(get_current_admin), db: Session = Depe
     ]
     signup_counts = _monthly_counts(db, User, User.created_at)
     login_counts = _monthly_counts(db, LoginActivity, LoginActivity.logged_in_at)
-     monthly_active_rows = db.execute(
+    monthly_active_rows = db.execute(
         select(
             func.date_format(LoginActivity.logged_in_at, '%Y-%m').label("month"),
             func.count(func.distinct(LoginActivity.user_id)).label("count")
