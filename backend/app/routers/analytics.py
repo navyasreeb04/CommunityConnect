@@ -207,11 +207,13 @@ def get_admin_analytics(_: User = Depends(get_current_admin), db: Session = Depe
     ]
     signup_counts = _monthly_counts(db, User, User.created_at)
     login_counts = _monthly_counts(db, LoginActivity, LoginActivity.logged_in_at)
-    monthly_active_rows = db.execute(
+     monthly_active_rows = db.execute(
         select(
-            func.strftime("%Y-%m", LoginActivity.logged_in_at).label("month"),
-            func.count(func.distinct(LoginActivity.user_id)).label("active_users"),
-        ).group_by("month")
+            func.date_format(LoginActivity.logged_in_at, '%Y-%m').label("month"),
+            func.count(func.distinct(LoginActivity.user_id)).label("count")
+        )
+        .group_by(func.date_format(LoginActivity.logged_in_at, '%Y-%m'))
+        .order_by(func.date_format(LoginActivity.logged_in_at, '%Y-%m'))
     ).all()
     active_counts = {month: count for month, count in monthly_active_rows}
     user_growth = [
