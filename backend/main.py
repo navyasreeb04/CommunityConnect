@@ -14,7 +14,8 @@ def create_app() -> FastAPI:
     frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:5173")
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[frontend_url,"http://localhost:5173",
+        allow_origins=["https://community-connect-flax.vercel.app",
+    "https://community-connect-git-main-navya-projects1.vercel.app",frontend_url,"http://localhost:5173",
     "http://localhost:3000",
     ],
         allow_credentials=True,
