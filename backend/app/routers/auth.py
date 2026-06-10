@@ -48,7 +48,7 @@ def login(payload: UserLogin, db: Session = Depends(get_db)):
     user = db.scalar(select(User).where(User.email == payload.email.lower()))
     if user is None or not verify_password(payload.password, user.password_hash):
         raise HTTPException(status_code=400, detail="Invalid email or password.")
-    if user.role != payload.role.lower():
+    if user.role.lower() != payload.role.lower():
         raise HTTPException(status_code=403, detail=f"This account is registered as a {user.role}, not a {payload.role}.")
 
     user.last_active_at = datetime.utcnow()
