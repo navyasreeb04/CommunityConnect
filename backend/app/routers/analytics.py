@@ -40,10 +40,22 @@ def _recent_months(total_months: int = 8) -> list[str]:
 
 def _monthly_counts(db: Session, model, date_column) -> dict[str, int]:
     # SQLite strftime keeps aggregation in the database so the dashboard can scale beyond demo data.
-    rows = db.execute(
-        select(func.strftime("%Y-%m", date_column).label("month"), func.count(model.id)).group_by("month")
-    ).all()
-    return {month: count for month, count in rows}
+    # rows = db.execute(
+    #     select(func.strftime("%Y-%m", date_column).label("month"), func.count(model.id)).group_by("month")
+    # ).all()
+    # return {month: count for month, count in rows}
+    stmt = (
+        select(
+            func.date_format(date_column, '%Y-%m').label("month"), 
+            func.count(model.id).label("count")
+        )
+        .group_by(func.date_format(date_column, '%Y-%m'))
+        .order_by(func.date_format(date_column, '%Y-%m'))
+    )
+    
+    # Execute the updated statement
+    rows = db.execute(stmt).all()
+    return rows
 
 
 @router.get("/user", response_model=UserAnalyticsRead)
